@@ -23,7 +23,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        logger.warn(`❌ Blocked by CORS: ${origin}`);
+        logger.warn(`Blocked by CORS: ${origin}`);
         callback(new Error('Not allowed by CORS'));
       }
     },
@@ -33,7 +33,7 @@ app.use(
   })
 );
 
-// -------------------
+
 app.use(express.json());
 
 // Simple console-based request logging
@@ -52,10 +52,10 @@ app.use(errorHandler);
 // MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => logger.info('✅ MongoDB connected'))
-  .catch((err) => logger.error(`❌ MongoDB connection failed: ${err.message}`));
+  .then(() => logger.info('MongoDB connected'))
+  .catch((err) => logger.error(`MongoDB connection failed: ${err.message}`));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => logger.info(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => logger.info(`Server running on port ${PORT}`));
 
 module.exports = app; // For integration testing

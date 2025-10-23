@@ -14,7 +14,7 @@ export default function ReportDetail() {
       .then((res) => setReport(res.data))
       .catch((err) => {
         console.error(err);
-        setError('❌ Failed to load report. Please try again.');
+        setError('Failed to load report. Please try again.');
       });
   }, [id]);
 
@@ -28,21 +28,21 @@ export default function ReportDetail() {
 
   const { basic, summary, accounts = [], score } = report;
 
-  // ✅ Credit Card Filter (Portfolio_Type = 'R' or Account_Type 10–13)
+  //  Credit Card Filter (Portfolio_Type = 'R' or Account_Type 10–13)
   const creditCardAccounts = accounts.filter((a) => {
     const type = String(a.accountType || '').trim();
     const portfolio = String(a.portfolioType || '').trim().toUpperCase();
     return portfolio === 'R' || ['10', '11', '12', '13'].includes(type);
   });
 
-  // ✅ Loan Accounts Filter (exclude Credit Cards)
+  //  Loan Accounts Filter (exclude Credit Cards)
   const loanAccounts = accounts.filter((a) => {
     const type = String(a.accountType || '').trim();
     const portfolio = String(a.portfolioType || '').trim().toUpperCase();
     return portfolio !== 'R' && !['10', '11', '12', '13'].includes(type);
   });
 
-  // ✅ Helpers
+  //  Helpers
   const getStatus = (a) => (a.currentBalance > 0 ? 'Active' : 'Closed');
   const formatCurrency = (n) =>
     n ? '₹' + Number(n).toLocaleString('en-IN') : '₹0';
@@ -133,7 +133,7 @@ export default function ReportDetail() {
   );
 }
 
-// ✅ Helper to safely render holder address
+//  Helper to safely render holder address
 function formatAddress(addr) {
   if (!addr) return '-';
   if (typeof addr === 'string') return addr;
@@ -149,7 +149,7 @@ function formatAddress(addr) {
     .join(', ');
 }
 
-// ✅ Reusable Account Table
+//  Account Table
 function AccountTable({ accounts, getStatus, formatCurrency }) {
   return (
     <div className="overflow-x-auto">
@@ -213,7 +213,7 @@ function AccountTable({ accounts, getStatus, formatCurrency }) {
   );
 }
 
-// ✅ Reusable summary box
+//  Reusable summary box
 function SummaryItem({ label, value }) {
   return (
     <div className="flex flex-col bg-gray-50 p-3 rounded-md border border-gray-100 hover:shadow-sm transition">

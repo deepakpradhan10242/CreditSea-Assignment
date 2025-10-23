@@ -13,7 +13,7 @@ beforeAll(async () => {
 
   app = express();
   app.use(express.json());
-  app.use(express.urlencoded({ extended: true })); // ✅ Needed for multer
+  app.use(express.urlencoded({ extended: true }));
   app.use('/api', reportRouter);
 });
 

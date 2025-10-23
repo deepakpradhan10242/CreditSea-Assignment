@@ -22,7 +22,7 @@ router.post('/upload', upload.single('file'), async (req, res, next) => {
     const mapped = mapXmlToReport(json);
 
     const doc = await Report.create(mapped);
-    logger.info(`✅ Report uploaded successfully (id: ${doc._id})`);
+    logger.info(`Report uploaded successfully (id: ${doc._id})`);
     res.status(201).json({ id: doc._id });
   } catch (err) {
     logger.error(`Upload failed: ${err.message}`);
@@ -66,7 +66,7 @@ router.delete('/reports/:id', async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    logger.info(`🗑️ Report deleted successfully (id: ${req.params.id})`);
+    logger.info(`Report deleted successfully (id: ${req.params.id})`);
     res.json({ success: true, message: 'Report deleted successfully' });
   } catch (err) {
     logger.error(`Failed to delete report ${req.params.id}: ${err.message}`);

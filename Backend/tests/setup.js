@@ -7,7 +7,7 @@ beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
 
-  // ✅ Ensure Mongoose uses the proper options for tests
+  // Ensure Mongoose uses the proper options for tests
   await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -25,7 +25,7 @@ afterAll(async () => {
 });
 
 afterEach(async () => {
-  // ✅ Optional: clean all collections between tests for isolation
+  // clean all collections between tests for isolation
   const collections = mongoose.connection.collections;
   for (const key in collections) {
     await collections[key].deleteMany({});

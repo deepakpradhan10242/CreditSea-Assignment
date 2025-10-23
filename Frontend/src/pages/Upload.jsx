@@ -14,7 +14,7 @@ export default function Upload() {
       setFile(selectedFile);
       setStatus('');
     } else {
-      setStatus('❌ Please upload a valid XML file.');
+      setStatus('Please upload a valid XML file.');
       setFile(null);
     }
   };
@@ -36,13 +36,13 @@ export default function Upload() {
       setFile(droppedFile);
       setStatus('');
     } else {
-      setStatus('❌ Please upload a valid XML file.');
+      setStatus('Please upload a valid XML file.');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) return setStatus('❌ Please select a file first.');
+    if (!file) return setStatus('Please select a file first.');
 
     const form = new FormData();
     form.append('file', file);
@@ -57,11 +57,11 @@ export default function Upload() {
         },
       });
       setProgress(100);
-      setStatus('✅ File uploaded successfully!');
+      setStatus('File uploaded successfully!');
       setFile(null);
     } catch (err) {
       console.error(err);
-      setStatus('❌ Upload failed. Try again.');
+      setStatus('Upload failed. Try again.');
       setProgress(0);
     }
   };
