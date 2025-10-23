@@ -7,7 +7,7 @@ Developed as part of the **CreditSea Internship Assignment**.
 
 ---
 
-## 🧠 Overview
+##  Overview
 
 This application allows users to:
 
@@ -19,7 +19,7 @@ This application allows users to:
 
 ---
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |-------|-------------|
@@ -33,7 +33,7 @@ This application allows users to:
 
 ---
 
-## ⚙️ Features
+##  Features
 
 ### 🔹 Backend
 - Upload Experian XML credit reports via REST API
@@ -59,46 +59,47 @@ This application allows users to:
 - Smart data display (Active/Closed accounts, dynamic tables)
 
 ---
-## ⚡️ Setup Instructions
+##  Setup Instructions
 
-### 🖥 Backend Setup
+###  Backend Setup
 
-1️⃣ Navigate to backend folder:
+1. Navigate to backend folder:
 ```bash
 cd backend
 ```
 
-2️⃣ Install dependencies:
+2️. Install dependencies:
 ```bash
 npm install
 ```
 
-3️⃣ Create .env file:
+3️. Create .env file:
 
-PORT=
+PORT=,
 MONGO_URI=
 
 
-4️⃣ Start the backend server:
+4️. Start the backend server:
 ```bash
 npm run dev
 ```
 
 ### Frontend Setup
 
-1️⃣ Navigate to frontend folder:
+1️. Navigate to frontend folder:
 ```bash
 cd frontend
 ```
 
 
-2️⃣ Install dependencies:
+2️. Install dependencies:
 ```bash
 npm install
 ```
+3️. Create .env file:
+VITE_API_URL=
 
-
-3️⃣ Start development server:
+4. Start development server:
 ```bash
 npm run dev
 ```
@@ -106,12 +107,12 @@ npm run dev
 ### Testing
 Integration testing uses Jest, Supertest, and MongoMemoryServer.
 
-1️⃣ Navigate to backend folder:
+1. Navigate to backend folder:
 ```bash
 cd backend
 ```
 
-2️⃣ Run tests:
+2. Run tests:
 ```bash
 npm test
 ```
