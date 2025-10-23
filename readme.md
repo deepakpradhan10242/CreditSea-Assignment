@@ -61,6 +61,18 @@ This application allows users to:
 ---
 ##  Setup Instructions
 
+## 🧩 Clone the Repository
+
+To get started with the project, first **clone the repository** and install dependencies for both frontend and backend.
+
+```bash
+git clone https://github.com/deepakpradhan10242/CreditSea-Assignment.git
+```
+# Move into the project folder
+```bash
+cd CreditSea-Assignment
+```
+
 ###  Backend Setup
 
 1. Navigate to backend folder:
@@ -103,6 +115,7 @@ VITE_API_URL=
 ```bash
 npm run dev
 ```
+Frontend will run on http://localhost:5173
 
 ### Testing
 Integration testing uses Jest, Supertest, and MongoMemoryServer.
