@@ -66,46 +66,52 @@ This application allows users to:
 1️⃣ Navigate to backend folder:
 ```bash
 cd backend
+```
 
 2️⃣ Install dependencies:
+```bash
 npm install
-
+```
 
 3️⃣ Create .env file:
 
 PORT=
 MONGO_URI=
-NODE_ENV=
 
 
 4️⃣ Start the backend server:
+```bash
 npm run dev
-
----
+```
 
 ### Frontend Setup
 
 1️⃣ Navigate to frontend folder:
+```bash
 cd frontend
+```
 
 
 2️⃣ Install dependencies:
+```bash
 npm install
+```
 
 
 3️⃣ Start development server:
+```bash
 npm run dev
-
+```
 
 ### Testing
-
 Integration testing uses Jest, Supertest, and MongoMemoryServer.
 
 1️⃣ Navigate to backend folder:
-
+```bash
 cd backend
-
+```
 
 2️⃣ Run tests:
-
+```bash
 npm test
+```
