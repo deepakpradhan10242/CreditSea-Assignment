@@ -59,16 +59,20 @@ This application allows users to:
 - Smart data display (Active/Closed accounts, dynamic tables)
 
 ---
+#  Live Link
+Since i have deployed on free tier server so it may takes some time so please wait
+https://credit-sea-assignment-cyan.vercel.app/
+
 ##  Setup Instructions
 
-## 🧩 Clone the Repository
+# Clone the Repository
 
 To get started with the project, first **clone the repository** and install dependencies for both frontend and backend.
 
 ```bash
 git clone https://github.com/deepakpradhan10242/CreditSea-Assignment.git
 ```
-# Move into the project folder
+## Move into the project folder
 ```bash
 cd CreditSea-Assignment
 ```
