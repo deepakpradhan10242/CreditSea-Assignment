@@ -10,7 +10,30 @@ const errorHandler = require('./middleware/errorHandler');
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// Strict CORS Setup
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'https://creditsea-frontend.vercel.app', // Production
+  'http://localhost:5173', // Dev (Vite default)
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        logger.warn(`❌ Blocked by CORS: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
+
+// -------------------
 app.use(express.json());
 
 // Simple console-based request logging
