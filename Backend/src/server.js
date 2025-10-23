@@ -13,7 +13,7 @@ const app = express();
 // Strict CORS Setup
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'https://creditsea-frontend.vercel.app', // Production
+  process.env.FRONTEND_URL || 'https://credit-sea-assignment-cyan.vercel.app', // Production
   'http://localhost:5173', // Dev (Vite default)
 ];
 
