@@ -113,7 +113,8 @@ cd frontend
 npm install
 ```
 3️. Create .env file:
-VITE_API_URL=
+
+VITE_API_URL=http://localhost:PORT/api
 
 4. Start development server:
 ```bash
