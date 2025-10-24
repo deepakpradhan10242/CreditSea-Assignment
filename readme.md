@@ -92,6 +92,7 @@ npm install
 3️. Create .env file:
 
 PORT=,
+
 MONGO_URI=
 
 
@@ -115,6 +116,8 @@ npm install
 3️. Create .env file:
 
 VITE_API_URL=http://localhost:PORT/api
+
+on place of PORT, write port backend port No.
 
 4. Start development server:
 ```bash
