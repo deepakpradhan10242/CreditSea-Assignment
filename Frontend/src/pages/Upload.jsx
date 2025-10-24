@@ -1,12 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api/api';
-import { UploadCloud, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { UploadCloud, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('');
+  const [statusType, setStatusType] = useState(''); // 'success' | 'error' | ''
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    if (status) {
+      const timer = setTimeout(() => {
+        setStatus('');
+        setStatusType('');
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const handleFileSelect = (e) => {
     const selectedFile = e.target.files[0];
@@ -15,6 +27,7 @@ export default function Upload() {
       setStatus('');
     } else {
       setStatus('Please upload a valid XML file.');
+      setStatusType('error');
       setFile(null);
     }
   };
@@ -24,9 +37,7 @@ export default function Upload() {
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -37,6 +48,7 @@ export default function Upload() {
       setStatus('');
     } else {
       setStatus('Please upload a valid XML file.');
+      setStatusType('error');
     }
   };
 
@@ -48,7 +60,11 @@ export default function Upload() {
     form.append('file', file);
 
     try {
-      setProgress(30);
+      setIsUploading(true);
+      setProgress(10);
+      setStatus('');
+      setStatusType('');
+
       const res = await api.post('/upload', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (p) => {
@@ -56,20 +72,30 @@ export default function Upload() {
           setProgress(percent);
         },
       });
+
       setProgress(100);
       setStatus('File uploaded successfully!');
+      setStatusType('success');
       setFile(null);
     } catch (err) {
       console.error(err);
-      setStatus('Upload failed. Try again.');
+      setStatus('Upload failed. Please try again.');
+      setStatusType('error');
       setProgress(0);
+    } finally {
+      setTimeout(() => {
+        setIsUploading(false);
+        setProgress(0);
+      }, 1200);
     }
   };
 
   return (
     <div className="font-sans max-w-lg mx-auto mt-10 bg-white shadow-lg border border-gray-200 rounded-2xl p-8 text-center space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800">Upload XML Report</h2>
-      <p className="text-gray-500 text-sm">Upload your Experian credit report (.xml) to generate insights</p>
+      <p className="text-gray-500 text-sm">
+        Upload your Experian credit report (.xml) to generate insights
+      </p>
 
       {/* Upload Zone */}
       <div
@@ -80,7 +106,11 @@ export default function Upload() {
           isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'
         }`}
       >
-        <UploadCloud size={40} className="text-blue-600" />
+        {isUploading ? (
+          <Loader2 size={36} className="text-blue-600 animate-spin" />
+        ) : (
+          <UploadCloud size={40} className="text-blue-600" />
+        )}
         <p className="text-gray-700 font-medium">
           {isDragging ? 'Drop your file here' : 'Drag & Drop XML here or click to browse'}
         </p>
@@ -118,40 +148,41 @@ export default function Upload() {
       {/* Upload Button */}
       <button
         onClick={handleSubmit}
-        disabled={!file}
+        disabled={!file || isUploading}
         className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-          file ? 'bg-blue-600 hover:bg-blue-700 shadow' : 'bg-gray-400 cursor-not-allowed'
+          !file || isUploading
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700 shadow'
         }`}
       >
-        Upload Report
+        {isUploading ? 'Uploading...' : 'Upload Report'}
       </button>
 
       {/* Progress Bar */}
-      {progress > 0 && progress < 100 && (
+      {progress > 0 && (
         <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden mt-2">
           <div
-            className="bg-blue-600 h-2 transition-all duration-300"
+            className={`h-2 transition-all duration-500 ${
+              statusType === 'error' ? 'bg-red-500' : 'bg-blue-600'
+            }`}
             style={{ width: `${progress}%` }}
           ></div>
         </div>
       )}
 
-      {/* Status Message */}
+      {/* Feedback Message */}
       {status && (
         <div
-          className={`flex items-center justify-center gap-2 mt-3 text-sm font-medium ${
-            status.startsWith('✅')
-              ? 'text-green-600'
-              : status.startsWith('❌')
-              ? 'text-red-600'
+          className={`flex items-center justify-center gap-2 mt-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+            statusType === 'success'
+              ? 'text-green-700 bg-green-50 border border-green-200'
+              : statusType === 'error'
+              ? 'text-red-700 bg-red-50 border border-red-200'
               : 'text-gray-700'
           }`}
         >
-          {status.startsWith('✅') ? (
-            <CheckCircle size={18} />
-          ) : status.startsWith('❌') ? (
-            <AlertCircle size={18} />
-          ) : null}
+          {statusType === 'success' && <CheckCircle size={18} className="text-green-600" />}
+          {statusType === 'error' && <AlertCircle size={18} className="text-red-600" />}
           <span>{status}</span>
         </div>
       )}
