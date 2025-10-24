@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { UploadCloud, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export default function Upload() {
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status) {
@@ -77,6 +79,11 @@ export default function Upload() {
       setStatus('File uploaded successfully!');
       setStatusType('success');
       setFile(null);
+
+      // Redirect to Reports List after 2 seconds
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (err) {
       console.error(err);
       setStatus('Upload failed. Please try again.');
