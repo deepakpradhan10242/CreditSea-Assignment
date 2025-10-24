@@ -7,15 +7,23 @@ export default function ReportDetail() {
   const { id } = useParams();
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .get(`/reports/${id}`)
-      .then((res) => setReport(res.data))
-      .catch((err) => {
+    const fetchReport = async () => {
+      try {
+        setIsLoading(true);
+        const res = await api.get(`/reports/${id}`);
+        setReport(res.data);
+      } catch (err) {
         console.error(err);
         setError('Failed to load report. Please try again.');
-      });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReport();
   }, [id]);
 
   if (error)
@@ -23,26 +31,33 @@ export default function ReportDetail() {
       <p className="text-center text-red-500 mt-10 font-medium">{error}</p>
     );
 
+  if (isLoading)
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh]">
+        <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+        <p className="text-gray-500 mt-4 text-sm">Loading report details...</p>
+      </div>
+    );
+
   if (!report)
-    return <p className="text-center text-gray-500 mt-10">Loading report...</p>;
+    return (
+      <p className="text-center text-gray-500 mt-10">No report data available.</p>
+    );
 
   const { basic, summary, accounts = [], score } = report;
 
-  //  Credit Card Filter (Portfolio_Type = 'R' or Account_Type 10–13)
   const creditCardAccounts = accounts.filter((a) => {
     const type = String(a.accountType || '').trim();
     const portfolio = String(a.portfolioType || '').trim().toUpperCase();
     return portfolio === 'R' || ['10', '11', '12', '13'].includes(type);
   });
 
-  //  Loan Accounts Filter (exclude Credit Cards)
   const loanAccounts = accounts.filter((a) => {
     const type = String(a.accountType || '').trim();
     const portfolio = String(a.portfolioType || '').trim().toUpperCase();
     return portfolio !== 'R' && !['10', '11', '12', '13'].includes(type);
   });
 
-  //  Helpers
   const getStatus = (a) => (a.currentBalance > 0 ? 'Active' : 'Closed');
   const formatCurrency = (n) =>
     n ? '₹' + Number(n).toLocaleString('en-IN') : '₹0';
@@ -133,7 +148,6 @@ export default function ReportDetail() {
   );
 }
 
-//  Helper to safely render holder address
 function formatAddress(addr) {
   if (!addr) return '-';
   if (typeof addr === 'string') return addr;
@@ -149,7 +163,6 @@ function formatAddress(addr) {
     .join(', ');
 }
 
-//  Account Table
 function AccountTable({ accounts, getStatus, formatCurrency }) {
   return (
     <div className="overflow-x-auto">
@@ -213,7 +226,6 @@ function AccountTable({ accounts, getStatus, formatCurrency }) {
   );
 }
 
-//  Reusable summary box
 function SummaryItem({ label, value }) {
   return (
     <div className="flex flex-col bg-gray-50 p-3 rounded-md border border-gray-100 hover:shadow-sm transition">
