@@ -6,18 +6,29 @@ import { Search, Trash2, Eye } from 'lucide-react';
 export default function ReportList() {
   const [reports, setReports] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/reports')
-      .then(res => setReports(res.data))
-      .catch(console.error);
+    const fetchReports = async () => {
+      try {
+        setIsLoading(true);
+        const res = await api.get('/reports');
+        setReports(res.data);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to fetch reports');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchReports();
   }, []);
 
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this report?')) return;
     try {
       await api.delete(`/reports/${id}`);
-      setReports(prev => prev.filter(r => r._id !== id));
+      setReports((prev) => prev.filter((r) => r._id !== id));
       alert('Report deleted successfully');
     } catch (err) {
       console.error(err);
@@ -25,11 +36,12 @@ export default function ReportList() {
     }
   };
 
-  const filteredReports = reports.filter(r =>
-    `${r.basic.firstName} ${r.basic.lastName}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase()) ||
-    r.basic.pan?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredReports = reports.filter(
+    (r) =>
+      `${r.basic.firstName} ${r.basic.lastName}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      r.basic.pan?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -43,7 +55,7 @@ export default function ReportList() {
             type="text"
             placeholder="Search by name or PAN..."
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full outline-none text-sm text-gray-700 placeholder-gray-400"
           />
         </div>
@@ -61,7 +73,16 @@ export default function ReportList() {
           </thead>
 
           <tbody>
-            {filteredReports.length > 0 ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan="4" className="p-6 text-center">
+                  <div className="flex flex-col items-center justify-center py-6">
+                    <div className="w-8 h-8 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+                    <p className="text-gray-500 mt-3 text-sm">Fetching reports...</p>
+                  </div>
+                </td>
+              </tr>
+            ) : filteredReports.length > 0 ? (
               filteredReports.map((r, i) => (
                 <tr
                   key={r._id}

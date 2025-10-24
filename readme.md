@@ -117,7 +117,7 @@ npm install
 
 VITE_API_URL=http://localhost:PORT/api
 
-on place of PORT, write port backend port No.
+on place of PORT, write backend port No.
 
 4. Start development server:
 ```bash
